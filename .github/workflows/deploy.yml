@@ -1,0 +1,28 @@
+name: Deploy PHP App
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Deploy to VM
+      uses: appleboy/ssh-action@v0.1.6
+      with:
+        host: ${{ secrets.VM_HOST }}
+        username: ${{ secrets.VM_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          rm -rf devops-deployment
+          git clone http://github.com/yourtechie/devops-deployment.git
+          cd devops-deployment/charitize
+          docker build -t php-app .
+          docker stop php-app || true
+          docker rm php-app || true
+          docker run -d -p 80:80 --name php-app php-app
