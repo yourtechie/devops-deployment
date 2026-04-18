@@ -19,10 +19,10 @@ jobs:
         username: ${{ secrets.VM_USER }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
-          rm -rf devops-deployment
-          git clone http://github.com/yourtechie/devops-deployment.git
+          sudo rm -rf devops-deployment
+          sudo git clone http://github.com/yourtechie/devops-deployment.git
           cd devops-deployment/charitize
-          docker build -t php-app .
-          docker stop php-app || true
-          docker rm php-app || true
-          docker run -d -p 80:80 --name php-app php-app
+          sudo docker build -t php-app .
+          sudo docker stop php-app || true
+          sudo docker rm php-app || true
+          sudo docker run -d -p 80:80 --name php-app php-app
